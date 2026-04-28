@@ -31,11 +31,34 @@ jobs:
         env:
           SSH_KEY: ${{ secrets.PLUTO_SSH_KEY }}
           PLUTO_HOST: ${{ secrets.PLUTO_HOST }}
+          PLUTO_USER: ${{ secrets.PLUTO_USER }}
         run: |
+          set -e
+          [ -n "$PLUTO_HOST" ] || { echo "::error::PLUTO_HOST secret is empty"; exit 11; }
+          [ -n "$PLUTO_USER" ] || { echo "::error::PLUTO_USER secret is empty"; exit 12; }
+          [ -n "$SSH_KEY" ]    || { echo "::error::PLUTO_SSH_KEY secret is empty"; exit 13; }
+          echo "Secret lengths — host=${#PLUTO_HOST} user=${#PLUTO_USER} key=${#SSH_KEY}"
           mkdir -p ~/.ssh
           printf '%s\n' "$SSH_KEY" > ~/.ssh/id_deploy
           chmod 600 ~/.ssh/id_deploy
-          ssh-keyscan -H "$PLUTO_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+          # Validate key parses
+          if ! ssh-keygen -y -f ~/.ssh/id_deploy > /dev/null 2>&1; then
+            echo "::error::Private key is malformed (ssh-keygen could not parse it)"
+            exit 14
+          fi
+          echo "Key parsed OK; first line: $(head -n1 ~/.ssh/id_deploy)"
+          # Resolve host via keyscan
+          if ! ssh-keyscan -H "$PLUTO_HOST" > ~/.ssh/known_hosts 2> /tmp/keyscan.err; then
+            echo "::error::ssh-keyscan failed:"
+            cat /tmp/keyscan.err
+            exit 15
+          fi
+          if [ ! -s ~/.ssh/known_hosts ]; then
+            echo "::error::known_hosts empty after keyscan — host did not respond"
+            cat /tmp/keyscan.err
+            exit 16
+          fi
+          echo "known_hosts lines: $(wc -l < ~/.ssh/known_hosts)"
 
       - name: Sync source + dist to Pluto
         env:
