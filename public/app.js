@@ -277,8 +277,8 @@ function renderMessagesContainer() {
   if (state.messages.length === 0) {
     container.appendChild(
       el("div", { class: "empty" },
-        el("h2", {}, "Ask me about LeadSpeed"),
-        el("div", {}, "I have access to internal docs and tribal knowledge that admins have loaded."),
+        el("h2", {}, "I'm Goby"),
+        el("div", {}, "Your personal guide to LeadSpeed, what can I help you with?"),
       ),
     );
     return container;
