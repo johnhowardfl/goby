@@ -108,6 +108,10 @@ label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 4px
 }
 .sidebar-header .brand { font-weight: 700; letter-spacing: 0.3px; }
 .sidebar-header .brand small { color: var(--muted); font-weight: 400; margin-left: 6px; font-size: 11px; }
+.brand-icon { width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; display: block; }
+.mobile-bar .brand-icon { width: 24px; height: 24px; }
+.role-avatar { width: 18px; height: 18px; border-radius: 50%; vertical-align: middle; margin-right: 6px; }
+.msg .role { display: flex; align-items: center; }
 
 .new-btn {
   margin: 12px;

@@ -167,6 +167,7 @@ function render() {
 function renderShell() {
   const sidebar = el("aside", { class: "sidebar" },
     el("div", { class: "sidebar-header" },
+      el("img", { src: "/goby-icon.png", alt: "Goby", class: "brand-icon" }),
       el("div", { class: "brand" }, "Goby ", el("small", {}, "LeadSpeed")),
     ),
     el("button", { class: "new-btn", onClick: () => newConversation() }, "+ New chat"),
@@ -177,6 +178,7 @@ function renderShell() {
   const main = el("main", { class: "main" },
     el("div", { class: "mobile-bar" },
       el("button", { class: "menu-btn", onClick: () => document.querySelector(".sidebar").classList.toggle("open") }, "☰"),
+      el("img", { src: "/goby-icon.png", alt: "Goby", class: "brand-icon" }),
       el("div", { class: "brand" }, "Goby"),
     ),
     renderMessagesContainer(),
@@ -235,8 +237,13 @@ function renderMessagesContainer() {
     const citEl = cits.length
       ? el("div", { class: "citations" }, "Sources: ", ...cits.map(c => el("code", {}, c)))
       : null;
+    const isGoby = m.role === "assistant";
+    const roleEl = el("div", { class: "role" },
+      isGoby ? el("img", { src: "/goby-icon.png", alt: "", class: "role-avatar" }) : null,
+      isGoby ? "Goby" : (state.user.display_name || state.user.email),
+    );
     inner.appendChild(el("div", { class: `msg ${m.role}` },
-      el("div", { class: "role" }, m.role === "user" ? (state.user.display_name || state.user.email) : "Goby"),
+      roleEl,
       body,
       citEl,
     ));
