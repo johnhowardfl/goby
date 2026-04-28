@@ -1,0 +1,77 @@
+name: Deploy to Pluto
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build (typecheck + compile)
+        run: npm run build
+
+      - name: Set up SSH
+        env:
+          SSH_KEY: ${{ secrets.PLUTO_SSH_KEY }}
+          PLUTO_HOST: ${{ secrets.PLUTO_HOST }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+          ssh-keyscan -H "$PLUTO_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Sync source + dist to Pluto
+        env:
+          REMOTE: ${{ secrets.PLUTO_USER }}@${{ secrets.PLUTO_HOST }}:/home/softwerks/domains/goby.softwerks.pro/goby/
+        run: |
+          rsync -az --delete \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='node_modules' \
+            --exclude='data' \
+            --exclude='.env' \
+            --exclude='knowledge/*' \
+            -e "ssh -i ~/.ssh/id_deploy" \
+            ./ "$REMOTE"
+
+      - name: Install runtime deps + restart service
+        env:
+          REMOTE_HOST: ${{ secrets.PLUTO_USER }}@${{ secrets.PLUTO_HOST }}
+        run: |
+          ssh -i ~/.ssh/id_deploy "$REMOTE_HOST" \
+            'cd /home/softwerks/domains/goby.softwerks.pro/goby && \
+             npm ci --omit=dev && \
+             sudo systemctl restart goby && \
+             sleep 2 && \
+             sudo systemctl is-active goby'
+
+      - name: Health check
+        run: |
+          for i in 1 2 3 4 5; do
+            if curl -fsS https://goby.softwerks.pro/health; then
+              echo
+              echo "Deploy verified."
+              exit 0
+            fi
+            echo "Health check attempt $i failed; retrying..."
+            sleep 2
+          done
+          echo "Health check never returned 200."
+          exit 1

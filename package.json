@@ -11,8 +11,8 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "dev": "tsx watch src/server.ts",
-    "ingest": "tsx src/rag/ingest.ts",
-    "init-admin": "tsx src/scripts/init-admin.ts"
+    "ingest": "node dist/rag/ingest.js",
+    "init-admin": "node dist/scripts/init-admin.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.40.0",
