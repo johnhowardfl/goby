@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sign in — Goby</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="center-card">
+    <form class="card" id="login-form">
+      <h1>Goby</h1>
+      <p class="sub">LeadSpeed support assistant</p>
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" type="email" required autocomplete="email" />
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input id="password" type="password" required autocomplete="current-password" />
+      </div>
+      <div class="spaced">
+        <a href="/signup.html" id="signup-link" style="display:none">Create the first admin</a>
+        <button type="submit">Sign in</button>
+      </div>
+      <div class="error" id="err"></div>
+    </form>
+  </div>
+  <script>
+    (async () => {
+      const me = await fetch("/api/auth/me").then(r => r.json());
+      if (me.user) location.href = "/";
+      if (me.needs_bootstrap) document.getElementById("signup-link").style.display = "inline";
+    })();
+    document.getElementById("login-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const err = document.getElementById("err");
+      err.textContent = "";
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: document.getElementById("email").value,
+          password: document.getElementById("password").value,
+        }),
+      });
+      if (!res.ok) {
+        const j = await res.json().catch(() => ({}));
+        err.textContent = j.error || "Sign-in failed";
+        return;
+      }
+      location.href = "/";
+    });
+  </script>
+</body>
+</html>

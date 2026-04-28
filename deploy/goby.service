@@ -1,0 +1,23 @@
+[Unit]
+Description=Goby — LeadSpeed support bot
+After=network.target
+
+[Service]
+Type=simple
+User=softwerks
+WorkingDirectory=/home/softwerks/domains/goby.softwerks.pro/goby
+EnvironmentFile=/home/softwerks/domains/goby.softwerks.pro/goby/.env
+ExecStart=/usr/bin/node /home/softwerks/domains/goby.softwerks.pro/goby/dist/server.js
+Restart=on-failure
+RestartSec=3
+StandardOutput=journal
+StandardError=journal
+# Hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=/home/softwerks/domains/goby.softwerks.pro/goby/data
+ProtectHome=read-only
+
+[Install]
+WantedBy=multi-user.target

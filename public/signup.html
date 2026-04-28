@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sign up — Goby</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="center-card">
+    <form class="card" id="signup-form">
+      <h1 id="title">Create account</h1>
+      <p class="sub" id="sub">Sign up for Goby</p>
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" type="email" required autocomplete="email" />
+      </div>
+      <div class="field">
+        <label for="display_name">Display name (optional)</label>
+        <input id="display_name" type="text" autocomplete="name" />
+      </div>
+      <div class="field">
+        <label for="password">Password (min 8 chars)</label>
+        <input id="password" type="password" minlength="8" required autocomplete="new-password" />
+      </div>
+      <div class="spaced">
+        <a href="/login.html">Have an account?</a>
+        <button type="submit">Create account</button>
+      </div>
+      <div class="error" id="err"></div>
+    </form>
+  </div>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const inviteToken = params.get("invite");
+    const titleEl = document.getElementById("title");
+    const subEl = document.getElementById("sub");
+    const emailEl = document.getElementById("email");
+
+    (async () => {
+      const me = await fetch("/api/auth/me").then(r => r.json());
+      if (me.user) { location.href = "/"; return; }
+
+      if (inviteToken) {
+        const r = await fetch(`/api/auth/invite/${inviteToken}`);
+        if (!r.ok) {
+          document.getElementById("err").textContent = "Invite is invalid or already used.";
+          return;
+        }
+        const inv = await r.json();
+        if (inv.email) { emailEl.value = inv.email; emailEl.readOnly = true; }
+        if (inv.is_admin) subEl.textContent = "You've been invited as an admin.";
+      } else if (me.needs_bootstrap) {
+        titleEl.textContent = "Create the first admin";
+        subEl.textContent = "No users yet — this account becomes the admin.";
+      } else {
+        document.getElementById("err").textContent = "An invite is required to sign up.";
+        document.querySelector("button[type=submit]").disabled = true;
+      }
+    })();
+
+    document.getElementById("signup-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const err = document.getElementById("err");
+      err.textContent = "";
+      const body = {
+        email: emailEl.value,
+        display_name: document.getElementById("display_name").value || undefined,
+        password: document.getElementById("password").value,
+      };
+      if (inviteToken) body.invite = inviteToken;
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) {
+        const j = await res.json().catch(() => ({}));
+        err.textContent = j.error || "Sign-up failed";
+        return;
+      }
+      location.href = "/";
+    });
+  </script>
+</body>
+</html>

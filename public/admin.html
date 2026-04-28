@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin — Goby</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="admin-shell">
+    <a href="/" class="admin-back">← Back to chat</a>
+    <h1>Admin</h1>
+    <div class="muted">Manage knowledge base and users.</div>
+
+    <div class="tabs">
+      <div class="tab active" data-tab="knowledge">Knowledge</div>
+      <div class="tab" data-tab="users">Users</div>
+    </div>
+
+    <div data-section="knowledge">
+      <div class="panel">
+        <h3>Upload files</h3>
+        <div class="muted" style="margin-bottom:12px;">Supported: <code>.md</code>, <code>.txt</code>, <code>.pdf</code>, <code>.docx</code>. Up to 25 MB each.</div>
+        <label class="dropzone" id="dropzone">
+          <input id="file-input" type="file" multiple accept=".md,.markdown,.txt,.pdf,.docx" />
+          Drop files here or click to choose
+        </label>
+        <div id="upload-results" style="margin-top:10px;font-size:13px;"></div>
+      </div>
+
+      <div class="panel">
+        <h3>Add a knowledge note</h3>
+        <div class="muted" style="margin-bottom:10px;">Quickest way to capture tribal knowledge — title becomes the source identifier.</div>
+        <div class="field"><label>Title</label><input id="note-title" placeholder="e.g. How customer onboarding actually works" /></div>
+        <div class="field"><label>Content (markdown)</label><textarea id="note-content" rows="8" placeholder="# Background\nWhen a customer signs up..."></textarea></div>
+        <button id="note-submit">Save note</button>
+      </div>
+
+      <div class="panel">
+        <h3>Documents</h3>
+        <table id="docs-table">
+          <thead><tr><th>Title</th><th>Source</th><th>Chunks</th><th>Size</th><th>Updated</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div data-section="users" style="display:none">
+      <div class="panel">
+        <h3>Invite a user</h3>
+        <div class="flex" style="margin-bottom:10px;">
+          <div class="flex-grow"><input id="invite-email" placeholder="email (optional — leaves invite open if blank)" /></div>
+          <label class="flex" style="font-size:14px"><input type="checkbox" id="invite-admin" style="width:auto" /> Admin</label>
+          <button id="invite-create">Create invite link</button>
+        </div>
+        <div id="invite-link" class="muted" style="font-size:13px;word-break:break-all"></div>
+      </div>
+      <div class="panel">
+        <h3>Users</h3>
+        <table id="users-table">
+          <thead><tr><th>Email</th><th>Name</th><th>Admin</th><th>Joined</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="panel">
+        <h3>Recent invites</h3>
+        <table id="invites-table">
+          <thead><tr><th>Email</th><th>Admin</th><th>Used</th><th>Created</th><th>Link</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/admin.js"></script>
+</body>
+</html>
