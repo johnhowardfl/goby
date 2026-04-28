@@ -7,6 +7,7 @@ import {
   listMessages,
   deleteConversation,
   streamReply,
+  searchConversations,
 } from "../chat.js";
 
 export const chatRouter = Router();
@@ -15,6 +16,15 @@ chatRouter.use(requireAuth);
 
 chatRouter.get("/conversations", (req: AuthedRequest, res) => {
   res.json(listConversations(req.user!.id));
+});
+
+chatRouter.get("/search", (req: AuthedRequest, res) => {
+  const q = String(req.query.q ?? "").trim();
+  if (!q) {
+    res.json([]);
+    return;
+  }
+  res.json(searchConversations(req.user!.id, q));
 });
 
 chatRouter.post("/conversations", (req: AuthedRequest, res) => {

@@ -9,6 +9,8 @@ const state = {
   messages: [],
   context: null,
   streaming: false,
+  searchQuery: "",
+  searchResults: null, // null = not searching; [] = searched but no hits
 };
 
 async function api(path, opts = {}) {
@@ -171,6 +173,7 @@ function renderShell() {
       el("div", { class: "brand" }, "Goby ", el("small", {}, "LeadSpeed")),
     ),
     el("button", { class: "new-btn", onClick: () => newConversation() }, "+ New chat"),
+    renderSearch(),
     renderConvList(),
     renderUserFooter(),
   );
@@ -188,17 +191,67 @@ function renderShell() {
   return el("div", { class: "app" }, sidebar, main);
 }
 
+function renderSearch() {
+  const input = el("input", {
+    type: "search",
+    class: "conv-search",
+    placeholder: "Search history…",
+    value: state.searchQuery,
+  });
+  input.addEventListener("input", (e) => debouncedSearch(e.target.value));
+  return el("div", { class: "conv-search-wrap" }, input);
+}
+
+let searchTimer;
+function debouncedSearch(q) {
+  state.searchQuery = q;
+  clearTimeout(searchTimer);
+  if (!q.trim()) {
+    state.searchResults = null;
+    refreshConvList();
+    return;
+  }
+  searchTimer = setTimeout(async () => {
+    try {
+      state.searchResults = await api(`/api/chat/search?q=${encodeURIComponent(q.trim())}`);
+    } catch {
+      state.searchResults = [];
+    }
+    refreshConvList();
+  }, 200);
+}
+
+function refreshConvList() {
+  const old = document.querySelector(".conv-list");
+  if (old) old.replaceWith(renderConvList());
+}
+
 function renderConvList() {
   const list = el("div", { class: "conv-list" });
-  if (state.conversations.length === 0) {
-    list.appendChild(el("div", { style: "color:var(--muted);padding:12px;font-size:13px" }, "No conversations yet."));
+  const searching = state.searchResults !== null;
+  const items = searching ? state.searchResults : state.conversations;
+
+  if (items.length === 0) {
+    const msg = searching
+      ? `No matches for "${state.searchQuery}".`
+      : "No conversations yet.";
+    list.appendChild(el("div", { class: "empty-list" }, msg));
+    return list;
   }
-  for (const c of state.conversations) {
+
+  for (const c of items) {
     const title = c.title || (state.activeId === c.id && state.messages[0]?.content?.slice(0, 40)) || `Conversation #${c.id}`;
+    const children = [el("div", { class: "conv-title" }, title)];
+    if (searching && c.snippet) {
+      children.push(el("div", { class: "conv-snippet" },
+        c.match_role === "assistant" ? "Goby: " : "",
+        c.snippet,
+      ));
+    }
     const item = el("div", {
       class: "conv-item" + (state.activeId === c.id ? " active" : ""),
       onClick: () => selectConversation(c.id),
-    }, title);
+    }, ...children);
     item.title = "Click to open. Right-click to delete.";
     item.addEventListener("contextmenu", (e) => { e.preventDefault(); deleteConversation(c.id); });
     list.appendChild(item);

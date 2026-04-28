@@ -78,6 +78,59 @@ export function deleteConversation(userId: number, id: number): void {
   db.prepare("DELETE FROM conversations WHERE id = ? AND user_id = ?").run(id, userId);
 }
 
+function setConversationTitle(id: number, title: string): void {
+  db.prepare("UPDATE conversations SET title = ? WHERE id = ?").run(title, id);
+}
+
+export interface SearchHit {
+  id: number;
+  title: string | null;
+  updated_at: number;
+  snippet: string | null;
+  match_role: "user" | "assistant" | null;
+}
+
+function extractSnippet(text: string, query: string, ctx = 50): string {
+  const idx = text.toLowerCase().indexOf(query.toLowerCase());
+  if (idx === -1) return text.slice(0, 120) + (text.length > 120 ? "…" : "");
+  const start = Math.max(0, idx - ctx);
+  const end = Math.min(text.length, idx + query.length + ctx);
+  return (start > 0 ? "…" : "") + text.slice(start, end).replace(/\s+/g, " ") + (end < text.length ? "…" : "");
+}
+
+export function searchConversations(userId: number, query: string): SearchHit[] {
+  const like = `%${query}%`;
+  const titleHits = db.prepare(`
+    SELECT id, title, updated_at FROM conversations
+    WHERE user_id = ? AND title LIKE ?
+  `).all(userId, like) as { id: number; title: string | null; updated_at: number }[];
+
+  // Most recent matching message per conversation wins
+  const msgHits = db.prepare(`
+    SELECT c.id as cid, c.title, c.updated_at, m.content, m.role
+    FROM messages m JOIN conversations c ON c.id = m.conversation_id
+    WHERE c.user_id = ? AND m.content LIKE ?
+    ORDER BY m.id DESC
+  `).all(userId, like) as { cid: number; title: string | null; updated_at: number; content: string; role: "user" | "assistant" }[];
+
+  const hits = new Map<number, SearchHit>();
+  for (const r of titleHits) {
+    hits.set(r.id, { id: r.id, title: r.title, updated_at: r.updated_at, snippet: null, match_role: null });
+  }
+  for (const r of msgHits) {
+    const existing = hits.get(r.cid);
+    if (existing && existing.snippet) continue;
+    hits.set(r.cid, {
+      id: r.cid,
+      title: r.title,
+      updated_at: r.updated_at,
+      snippet: extractSnippet(r.content, query),
+      match_role: r.role,
+    });
+  }
+  return Array.from(hits.values()).sort((a, b) => b.updated_at - a.updated_at).slice(0, 50);
+}
+
 // --- Streaming chat with RAG ---
 
 export interface StreamChunk {
@@ -90,6 +143,11 @@ export async function* streamReply(
   userMessage: string,
 ): AsyncGenerator<StreamChunk> {
   const history = listMessages(conversationId);
+  // Auto-title on first user message so the sidebar isn't full of "Conversation #N".
+  if (history.length === 0) {
+    const title = userMessage.trim().split("\n")[0].slice(0, 60);
+    if (title) setConversationTitle(conversationId, title);
+  }
   appendMessage(conversationId, "user", userMessage);
 
   let retrieved: RetrievedChunk[] = [];
