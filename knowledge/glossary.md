@@ -54,6 +54,20 @@ Leadline. Equipment-level entry under a Lead. The standard sales-bidding workflo
 
 A custom HubSpot field used to mirror the LeadSpeed legacy Deal Stage values. Created 2023-09-27 as part of the Reports Module / HubSpot migration so that legacy stage values could be carried forward into the new HubSpot-driven model.
 
+## ECI Solutions / Jason Pegel
+
+**ECI Solutions** is the company that makes M1 (the legacy Hydro-Dyne ERP that LeadSpeed v1 originally synced with). **Jason Pegel** (`jpegel@ecisolutions.com`) was the technical contact at ECI. ECI's involvement in LeadSpeed was advisory — confirming what was safe to do to M1's database. Notable historical decision (2016-10-05): use M1's `UniqueID` GUID field for sync identity, NOT add Primary Keys (which would break M1).
+
+With M1 decommissioned in 2023, ECI's involvement is no longer active. Reference only.
+
+## Mercury / Jupiter
+
+Hydro-Dyne server names from the M1 era. **Mercury** = the production M1 server. **Jupiter** = a separate M1 environment (sync was deployed there 2017-03-16). Both pre-date V3 and are no longer in active use post-M1-decommissioning.
+
+## "softwerks cost hde leadspeed" — earliest LeadSpeed artifact
+
+Google Sheet first shared 2016-09-02 between John and Christy. The very first time the name "LeadSpeed" appears in the email record. See [architecture/leadspeed-inception-2016](architecture/leadspeed-inception-2016.md).
+
 ## George Morgan / Hydro-Dyne IT
 
 **George B. Morgan III** — Systems Administrator at Hydro-Dyne Engineering (`george.morgan@hydro-dyne.com`). Hydro-Dyne's primary IT contact for anything that touches their internal systems: M1 server access, Microsoft 365 tenant questions, network/firewall changes. If Saksoft needs Hydro-Dyne-side cooperation (e.g., the Graph API password rotation work, M1 server access, ConnectWise Control / TeamViewer setups), route through George.
