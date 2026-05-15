@@ -17,6 +17,30 @@ Chronological list of LeadSpeed v3 production releases that appeared in email, l
 - Per Varun: *"We have released all features developed up to March 30, 2026, to production in line with the agreed deadline of April 10, 2026."*
 - Saksoft awaiting feedback from Hydro-Dyne after this release
 
+## 2025-12-11 — Release Notes & Updates
+
+- Subject: "Release Notes and Updates 11/12/2025"
+- Inline summary from Varun: *"the address selection option will be displayed after choosing the affiliate company when creating a service request. We have deployed several tickets to the production environment."*
+- Attached release notes file: `Softwerks_Leadspeed_Release_Notes_10_11_2025.docx`
+- Next-sprint focus stated: **Question module** under Project Proposal, and **Technician Job Request view** in PWA
+
+## 2025-11-07 — Alpha release notes
+
+- Subject: "Alpha Release notes -7th November 2025"
+- Part of **Sprint Alpha** (23 Oct – 7 Nov 2025), created in Jira at Varun's request 2025-10-27
+
+## 2025-10-09 — Production Release notes
+
+- Subject: "Re : Leadspeed Production Release notes - 09-10-2025."
+- Sent by Leela Kumar C
+- Attached release notes file (not detailed in body)
+
+## 2025-09-09 — Release Notes
+
+- Subject: "Release Notes 9/9/2025"
+- Sent by Varun Dabir
+- Attached release notes file (not detailed in body)
+
 ## Bundled hotfixes (not formal releases)
 
 | Date (UTC) | What |

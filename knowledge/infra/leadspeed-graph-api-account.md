@@ -11,6 +11,12 @@ Reference info on the Microsoft Graph API integration that LeadSpeed uses to int
 
 The Hydro-Dyne tenant policy expires the password on this service account every 60–90 days. Each expiration breaks the integration. See the dedicated bug page: [graph-api-password-expiry-2026-03](../bugs/graph-api-password-expiry-2026-03.md).
 
+This is **recurring**, not a one-time event:
+- **2025-08-14** — Earlier Microsoft Graph API failure on the Hydro-Dyne Teams integration. Leela tested from a browser and got a popup error; she escalated through John for the Hydro-Dyne Teams account manager. Resolution path was via Hydro-Dyne IT (Thriveon Support, ticket `#993466`).
+- **2026-03-23** — The expiry pattern recurred (full detail in the [graph-api-password-expiry-2026-03 bug page](../bugs/graph-api-password-expiry-2026-03.md)).
+
+So when this fails, treat it as a known recurring class of incident — start with "is the password expired again?" rather than "is something new broken?"
+
 ## Error signature
 
 When this fails, you'll see this in logs / `noreply@leadspeed.me` notifications:
