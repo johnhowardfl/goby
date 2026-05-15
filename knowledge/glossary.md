@@ -100,6 +100,10 @@ This means John reviews things twice: when they hit Stage, and again as Release 
 
 The Production application VM for LeadSpeed v2 (since superseded). Originally **Standard DS2 v2** (2 vCPU, 7 GB RAM, ~$106.58/mo). Sized up in February 2023 due to high CPU/memory utilization — see [bugs/leadspeed-v2-high-cpu-2023-02](bugs/leadspeed-v2-high-cpu-2023-02.md). Later subjected to IP migration in September 2025 (see [infra/azure-public-ip-upgrades](infra/azure-public-ip-upgrades.md)).
 
+## Azure DevOps (vs. GitHub)
+
+LeadSpeed's source repositories and CI/CD pipelines migrated from the Softwerks GitHub organization to **Azure DevOps** in September 2022. Approved by John 2022-09-26. Anyone looking for the LeadSpeed source code in GitHub will not find it under Softwerks; it lives in Azure DevOps now.
+
 ## Revamp
 
 DreamOrbit's internal codename for the V3 build effort, used in 2022 weekly status reports (e.g., *"Performing regression testing on stage is On hold until Revamp is completed"*). If you see "Revamp" in older emails, it means V3 development. See [architecture/m1-decommissioning-and-revamp](architecture/m1-decommissioning-and-revamp.md).

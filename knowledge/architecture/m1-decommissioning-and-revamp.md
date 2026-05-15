@@ -37,6 +37,11 @@ Per Varun 2023-01-06 (V3 release prep): Hydro-Dyne was asked to make **First Nam
 
 ## Migration process (high level)
 
+0. **Jul 21, 2022** — **Revamp project officially kicked off.** John approved DreamOrbit's "Leadspeed Revamp UX/UI estimation" on 2022-07-28: *"This is an approval to proceed with the UX/UI project for Leadspeed with a budget based on the hours included in this estimate."*
+0a. **Jul–Aug 2022** — UX work, regression testing on V2, "Leadspeed 2.0 SoW" finalized
+0b. **Sep 2022** — Azure DevOps migration: LeadSpeed repos and CI/CD pipelines moved from the Softwerks GitHub organization to **Azure DevOps**. Approved by John 2022-09-26.
+0c. **Sep 2022** — Cost analysis of LeadSpeed Azure subscription completed; initial cleanup of unused resources
+0d. **Sep 2022** — Azure AD security defaults / **MFA enabled** on the Softwerks tenant (2022-10-13/14, Bony Augustine)
 1. **Oct 2022** — V3 backend development of Sizing, Pricing, Drawing modules begins; weekly Saksoft status updates reference "Revamp" hold on regression
 2. **Nov 2022** — Data migration estimates approved (2022-11-23). HubSpot Lead ID details requested for de-duplication.
 3. **Dec 2022** — DreamOrbit team accesses M1 via screenconnect for migration scripting. "Entered by" → "lead owner" decision finalized.
