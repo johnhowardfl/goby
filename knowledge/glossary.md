@@ -57,3 +57,19 @@ A custom HubSpot field used to mirror the LeadSpeed legacy Deal Stage values. Cr
 ## Hubspot Deal ID
 
 When LeadSpeed shows a Deal Amount, that value comes from HubSpot — LeadSpeed is a passthrough. See [integrations/hubspot-deal-amount](integrations/hubspot-deal-amount.md).
+
+## FlightOps.me
+
+The pre-bearair.me domain for the FMS/FlightOps application. Renewed via Sectigo as of 2023-07-06. Effectively FlightOps' own dedicated domain in the V2/V3-transition era. Has been replaced/superseded by `bearair.me` for current customer-facing use. If a user references FlightOps.me, they're talking about the FMS product, just under its older domain.
+
+## HDEENG01 / `novasocthreatdetectionservice.exe`
+
+Hydro-Dyne's M1 server (inside the HDE network) that LeadSpeed used to sync to during the M1 era. Generated New Relic monitoring alerts (specifically the "I/O Read Bytes Per Second > 1.0E7" alert from `novasocthreatdetectionservice.exe`) — those alerts hit `noreply@leadspeed.me` and were forwarded to Saksoft. With M1 decommissioning, those alerts should have stopped firing. If they recur, it implies there's still active sync happening to M1 that probably shouldn't be.
+
+## LDS-4320 era
+
+Earliest visible LDS-NNNN Jira ticket numbering in the email record is around LDS-4320 (May 2023, V3 sprint 2 release). The LeadSpeed Jira project numbering does not start at 1 — it picked up from a higher base, likely inherited from a predecessor project tracker.
+
+## Phoenix vs. leadspeed.me
+
+The current production domain is `leadspeed.me` (since ~2023-04-10). The earlier `phoenix.leadspeed.me` URL referenced in older emails was the V2 frontend. After V3 launch, V2/Phoenix was decommissioned (May 2023).
