@@ -116,6 +116,10 @@ V2/M1 had an "entered by" field showing the M1 user who originally created the l
 
 The web entry point for accessing the legacy M1 application's Windows machine. Credentials `softwerks@hydro-dyne.com` were used by Saksoft for V2→V3 migration work. With M1 decommissioned, this access path should no longer be needed for normal operations — only for historical data archaeology.
 
+## SendGrid
+
+The email-sending service used by LeadSpeed (and previously FlightOps) for notifications. Has its own subscription credentials. In June 2022 the FlightOps SendGrid was being refreshed with new credentials. If LeadSpeed notifications stop sending (not the same as "responders configured wrong" — actual delivery failure), check SendGrid status / credentials first.
+
 ## Telerik Kendo UI license
 
 LeadSpeed v3's frontend uses **Kendo UI** (Telerik). The license is annual; John holds the subscription and shares the license key with Saksoft for QA/Stage/Prod environments. Subscription product: *"Kendo UI + ASP.NET (MVC & Core), PHP, JSP - Priority Support"*. Originally renewed 2023-02-07. License expired in 2025-05 (see "Angular Kendo UI License" thread, 2025-05-15).
