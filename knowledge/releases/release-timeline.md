@@ -55,6 +55,43 @@ Chronological list of LeadSpeed v3 production releases that appeared in email, l
 - Focus: **Code Optimization** tickets (rather than feature work)
 - Attached release notes file
 
+## 2025-02-17 — Release notes
+
+- Subject: "Release notes 02/17/20225" (typo in original subject)
+- Sent by Varun Dabir (`@dreamorbit.com`)
+- Attached release notes file
+
+## 2025-01-22 — Production release
+
+- Subject: "Re : Production release alert!"
+- Sent by Leela Kumar C
+- Attached release notes file
+
+## 2024-12-27 — LDS release notes
+
+- Subject: "Re : LDS - Released notes - 27-12-2024"
+- Sent by Leela Kumar C on 2024-12-30
+- Attached release notes file
+
+## 2024-12-12 — Leadspeed release notes (updated)
+
+- Subject: "Re : Leadspeed release notes - 11th December 2024 (Updated )"
+- Sent by Leela Kumar C
+- Attached release notes file
+
+## 2024-12-04 — Stage release for testing
+
+- Subject: "Softwerks_Leadspeed_Release_Notes to Stage_03_12_2024"
+- Sent by Varun Dabir
+- Tickets released to **Stage** for John to test before Prod promotion
+- Note: this is a Stage release, not Prod — the typical pattern is Stage → John tests → Prod promotion in the next release cycle
+
+## 2024-11-21 — Leadspeed Release notes
+
+- Subject: "Re : Leadspeed Release notes."
+- Sent by Leela Kumar C
+- Attached release notes file (no specific date in subject)
+
 ## Bundled hotfixes (not formal releases)
 
 | Date (UTC) | What |
