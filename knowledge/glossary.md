@@ -54,6 +54,12 @@ Leadline. Equipment-level entry under a Lead. The standard sales-bidding workflo
 
 A custom HubSpot field used to mirror the LeadSpeed legacy Deal Stage values. Created 2023-09-27 as part of the Reports Module / HubSpot migration so that legacy stage values could be carried forward into the new HubSpot-driven model.
 
+## George Morgan / Hydro-Dyne IT
+
+**George B. Morgan III** — Systems Administrator at Hydro-Dyne Engineering (`george.morgan@hydro-dyne.com`). Hydro-Dyne's primary IT contact for anything that touches their internal systems: M1 server access, Microsoft 365 tenant questions, network/firewall changes. If Saksoft needs Hydro-Dyne-side cooperation (e.g., the Graph API password rotation work, M1 server access, ConnectWise Control / TeamViewer setups), route through George.
+
+(Side note from 2022: Hydro-Dyne's M1 server didn't have remote licenses, so they used ConnectWise Control / TeamViewer to grant Saksoft temporary access for migration work.)
+
 ## Genius
 
 Hydro-Dyne's **ERP system**. Handles production. Out-features the older M1 system. Critical context: Genius does NOT include a native CRM — its CRM is a bolt-on that is expensive per seat and doesn't fit Hydro-Dyne's unique approval/notification processes. **This is why LeadSpeed exists** — see [architecture/leadspeed-vision-and-genius-integration](architecture/leadspeed-vision-and-genius-integration.md).

@@ -37,6 +37,8 @@ Per Varun 2023-01-06 (V3 release prep): Hydro-Dyne was asked to make **First Nam
 
 ## Migration process (high level)
 
+0catalyst. **Oct 2021** — Major **Azure SQL Sync Group out-of-date** incident. The sync between LeadSpeed's Azure SQL DB and the on-premise M1 member server broke; Microsoft Support engaged (Carole Hannon, ticket `#2110040060003471`). Root cause: Azure couldn't connect to the on-premise server. Resolution: recreate the sync group. **This sync fragility is the technical catalyst for the Jan 2022 strategic decision to unhook LeadSpeed from M1 entirely.**
+0vision. **Jan 15, 2022** — John's "LeadSpeed Evolution" email to Neeraj Kumar — strategic decision to decouple from M1 and integrate with Genius instead. See [leadspeed-vision-and-genius-integration](./leadspeed-vision-and-genius-integration.md) for the canonical statement.
 0pre. **Mar 28, 2022** — DreamOrbit (Pawan Yadav) shares **initial ballpark estimates** for "Leadspeed_UX/UI_Revamp" — earliest recorded Revamp project artifact.
 0pre2. **May 2022** — **CICD project initiated** in parallel: separate Azure VM (`cicdadmin` user) provisioned, blob storage account `v3aviationfsmstage` created for FMS V3aviation/BearDefence tenants. Approved by John 2022-05-10.
 0. **Jul 21, 2022** — **Revamp project officially kicked off.** John approved DreamOrbit's "Leadspeed Revamp UX/UI estimation" on 2022-07-28: *"This is an approval to proceed with the UX/UI project for Leadspeed with a budget based on the hours included in this estimate."*
