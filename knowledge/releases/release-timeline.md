@@ -138,6 +138,41 @@ Chronological list of LeadSpeed v3 production releases that appeared in email, l
 
 - Subject: "Release notes 1/4/2024"
 
+## 2024-02-16 — Release with LDS tickets
+
+- Subject: "Re : Leadspeed Release notes for 16-02-2024."
+- **Tickets:** LDS-4679, LDS-4689, LDS-4708, LDS-4709
+- First clear example of release-notes-with-Jira-ticket-numbers cited in email body
+
+## 2024-02-06 — Release Notes 06/02/2024
+
+- Subject: "Release Notes 06/02/2024"
+
+## 2024-01-12 — Release Notes 12/1/2024
+
+- Subject: "Release Notes 12/1/2024"
+
+## 2023-12-04 — Service Report Module release
+
+- Subject: "Release Notes of Service Report Module"
+
+## 2023-11-10 — Reports Scheduler
+
+- Subject: "Release notes for Reports Scheduler"
+
+## 2023-10-12 — October Reports Module release
+
+- Subject: "October Reports Module Release Notes"
+- Tickets in the attached release notes
+
+## 2023-10-02 — Service Module Production launch
+
+- Subject: "Re : Service Module Production Release update."
+- **Major milestone:** Service Module went live on Production
+- Released over the weekend (work approved as Holiday/Weekend on 2023-10-01/02)
+- Smoke tests passed; data validation completed
+- John verified spot-checks on lead service requests after release
+
 ## Bundled hotfixes (not formal releases)
 
 | Date (UTC) | What |

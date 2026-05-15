@@ -28,6 +28,15 @@ When implementing a new V3 module that has a V2 predecessor, the default decisio
 
 The Questions module specifically was decided as no-migration (recreate post-launch).
 
+## Employee ID → User ID consolidation
+
+- **V2 / pre-V3 era:** Hydro-Dyne employees had distinct **M1 Employee IDs** that were separate from LeadSpeed user accounts. When an M1 user gained LeadSpeed access, they had two identities: their M1 Employee ID and their LeadSpeed v2 user.
+- **V3:** Consolidated. There's a single **User ID**, period. New M1 users now get a LeadSpeed user, full stop — no separate Employee ID concept.
+
+Confirmed by John Howard 2024-02-14 in response to Varun's clarification: *"I expected this would need to be the evolution of the users. Transitioning all types of users/employees from whatever platform to be just a user of leadspeed. No need to house multiple [user types]."*
+
+If a user references "their Employee ID" expecting it to behave separately from their LeadSpeed user, explain that V3 unified them — there's one identity now.
+
 ## Unknown / untracked differences
 
 The full V2 → V3 design diff isn't centrally documented in email — it's spread across release notes, Jira tickets, and oral history. If a user asks "did V3 change behavior X?" and it isn't covered above, check the release timeline and ask Varun or Leela.
