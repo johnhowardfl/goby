@@ -37,6 +37,8 @@ Per Varun 2023-01-06 (V3 release prep): Hydro-Dyne was asked to make **First Nam
 
 ## Migration process (high level)
 
+0pre. **Mar 28, 2022** — DreamOrbit (Pawan Yadav) shares **initial ballpark estimates** for "Leadspeed_UX/UI_Revamp" — earliest recorded Revamp project artifact.
+0pre2. **May 2022** — **CICD project initiated** in parallel: separate Azure VM (`cicdadmin` user) provisioned, blob storage account `v3aviationfsmstage` created for FMS V3aviation/BearDefence tenants. Approved by John 2022-05-10.
 0. **Jul 21, 2022** — **Revamp project officially kicked off.** John approved DreamOrbit's "Leadspeed Revamp UX/UI estimation" on 2022-07-28: *"This is an approval to proceed with the UX/UI project for Leadspeed with a budget based on the hours included in this estimate."*
 0a. **Jul–Aug 2022** — UX work, regression testing on V2, "Leadspeed 2.0 SoW" finalized
 0b. **Sep 2022** — Azure DevOps migration: LeadSpeed repos and CI/CD pipelines moved from the Softwerks GitHub organization to **Azure DevOps**. Approved by John 2022-09-26.

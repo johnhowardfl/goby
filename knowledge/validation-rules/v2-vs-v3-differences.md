@@ -37,6 +37,11 @@ Confirmed by John Howard 2024-02-14 in response to Varun's clarification: *"I ex
 
 If a user references "their Employee ID" expecting it to behave separately from their LeadSpeed user, explain that V3 unified them — there's one identity now.
 
+## Deactivated user reactivation
+
+- **V2:** Once a user was marked **(Inactive)**, there was **no way to reactivate them**. The user record was retained with the (Inactive) suffix on their name, but the application had no UI/switch to flip them back to active. Confirmed by John 2022-05-16: *"I don't think there is a ability to reactivate a deactivated account. We KEEP the users data and mark (Inactive) next to their name but we apparently never added a switch to re-activate them."*
+- **V3:** Behavior in V3 is not documented in the email record. **Verify whether V3 added a reactivate switch before telling a user "you can re-enable that account."** If no, the workaround was historically to create a fresh user (which is what David Reo at Pinecrest had to do in 2026 when his accounts went inactive — see [integrations/chatbot-api-write-access](../integrations/chatbot-api-write-access.md)).
+
 ## Unknown / untracked differences
 
 The full V2 → V3 design diff isn't centrally documented in email — it's spread across release notes, Jira tickets, and oral history. If a user asks "did V3 change behavior X?" and it isn't covered above, check the release timeline and ask Varun or Leela.
