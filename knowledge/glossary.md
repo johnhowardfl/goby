@@ -54,6 +54,12 @@ Leadline. Equipment-level entry under a Lead. The standard sales-bidding workflo
 
 A custom HubSpot field used to mirror the LeadSpeed legacy Deal Stage values. Created 2023-09-27 as part of the Reports Module / HubSpot migration so that legacy stage values could be carried forward into the new HubSpot-driven model.
 
+## Genius
+
+Hydro-Dyne's **ERP system**. Handles production. Out-features the older M1 system. Critical context: Genius does NOT include a native CRM — its CRM is a bolt-on that is expensive per seat and doesn't fit Hydro-Dyne's unique approval/notification processes. **This is why LeadSpeed exists** — see [architecture/leadspeed-vision-and-genius-integration](architecture/leadspeed-vision-and-genius-integration.md).
+
+LeadSpeed → Genius integration: Leads that mature into "jobs" are exported from LeadSpeed to Genius (export format TBD — CSV / XML over FTP / REST per what Genius accepts).
+
 ## Hubspot Deal ID
 
 When LeadSpeed shows a Deal Amount, that value comes from HubSpot — LeadSpeed is a passthrough. See [integrations/hubspot-deal-amount](integrations/hubspot-deal-amount.md).
