@@ -73,3 +73,33 @@ Earliest visible LDS-NNNN Jira ticket numbering in the email record is around LD
 ## Phoenix vs. leadspeed.me
 
 The current production domain is `leadspeed.me` (since ~2023-04-10). The earlier `phoenix.leadspeed.me` URL referenced in older emails was the V2 frontend. After V3 launch, V2/Phoenix was decommissioned (May 2023).
+
+## FMS tenants — V3aviation, Beardefence, Logr
+
+The FMS application is **multi-tenant**. Different customers operate under different tenant brands:
+
+- **V3aviation** — flagship FMS tenant, served at `fms.v3aviation.aero`. Customer: V3 Aviation (Jennifer Jolivet at `jjolivet@v3aviation.aero`). Their public-facing wildcard cert lives at `*.bearair.me`.
+- **Beardefence** — separate FMS tenant. Mentioned in the 2023-04-12 FMS release as a deployment target alongside V3aviation.
+- **Logr** — third FMS tenant. Per Varun 2023-04-12: *"We weren't able to test this feature on Logr application"* — implying it's a known but separate-test-environment tenant.
+
+If a customer mentions any of these names, they're talking about an FMS instance.
+
+## Jira workflow — Stage → Release Candidate → Production
+
+The LeadSpeed Jira board has a status flow that includes a **Release Candidate** column (added 2023-04-27). The standard ticket lifecycle:
+
+1. Dev complete → tested in **QA**
+2. Pushed to **Stage** for John's review
+3. After John verifies, ticket moves to **Release Candidate** column
+4. Tickets in Release Candidate are batched into the next Production deploy
+5. After deploy, status moves to **Done**
+
+This means John reviews things twice: when they hit Stage, and again as Release Candidates before they go to Prod.
+
+## ls-prod-svr VM
+
+The Production application VM for LeadSpeed v2 (since superseded). Originally **Standard DS2 v2** (2 vCPU, 7 GB RAM, ~$106.58/mo). Sized up in February 2023 due to high CPU/memory utilization — see [bugs/leadspeed-v2-high-cpu-2023-02](bugs/leadspeed-v2-high-cpu-2023-02.md). Later subjected to IP migration in September 2025 (see [infra/azure-public-ip-upgrades](infra/azure-public-ip-upgrades.md)).
+
+## Telerik Kendo UI license
+
+LeadSpeed v3's frontend uses **Kendo UI** (Telerik). The license is annual; John holds the subscription and shares the license key with Saksoft for QA/Stage/Prod environments. Subscription product: *"Kendo UI + ASP.NET (MVC & Core), PHP, JSP - Priority Support"*. Originally renewed 2023-02-07. License expired in 2025-05 (see "Angular Kendo UI License" thread, 2025-05-15).
