@@ -92,6 +92,52 @@ Chronological list of LeadSpeed v3 production releases that appeared in email, l
 - Sent by Leela Kumar C
 - Attached release notes file (no specific date in subject)
 
+## 2024-10-22 — Release Notes 22-10-2024
+
+- Subject: "Release Notes 22-10-2024"
+- Sent by Varun Dabir
+- Changes pushed to Production same day
+
+## 2024-10-18 — Release Notes 18-10-2024
+
+- Subject: "Release Notes 18-10-2024"
+- Sent by Varun Dabir
+- John copied these into "system announcements" for users
+
+## 2024-09-30 — Release notes (two)
+
+- Subjects: "30-09-2024 release notes" and "27-09-2024 release notes" (the latter was a quick fix from the previous Friday)
+- Sent by Varun Dabir
+
+## 2024-09-02 — Leadspeed Production release notes
+
+- Subject: "Leadspeed production release notes"
+- Sent by Leela Kumar C
+
+## 2024-08-26 — User Log History feature
+
+- Subject: "08/26/2024 Release Notes"
+- Sent by Varun Dabir
+- **Notable feature:** User Log History released to Production
+
+## 2024-07-31 — Release Notes 31-07-2024
+
+- Subject: "Softwerks_Leadspeed_Release_Notes_31_07_2024"
+- Attached release notes file
+
+## 2024-07-23 — Release Notes 23-07-2024
+
+- Subject: "Softwerks_Leadspeed_Release_Notes_23_07_2024"
+- Tickets pushed to Production
+
+## 2024-06-13 — Release Notes 13-06-2024
+
+- Subject: "Release Notes 13-06-2024"
+
+## 2024-04-01 — Release notes 1/4/2024
+
+- Subject: "Release notes 1/4/2024"
+
 ## Bundled hotfixes (not formal releases)
 
 | Date (UTC) | What |
