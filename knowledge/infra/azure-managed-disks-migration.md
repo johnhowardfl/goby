@@ -4,7 +4,7 @@
 
 Saksoft (Teja Jangam) flagged on 2026-03-02 that the **Stage Virtual Machine** under the LeadSpeed environment was using **Azure unmanaged disks**.
 
-Microsoft announced retirement of unmanaged disks effective **31 March 2026**.
+Microsoft announced retirement of unmanaged disks effective **31 March 2026**. The first Microsoft notification reached John on 2025-02-20 (subject: "Action required: Migrate your data from Azure unmanaged disk storage to managed disks"); John forwarded to Leela the next day asking whether it affected LeadSpeed. Leela checked with Rudresh's team and the migration was eventually scheduled for early 2026 (~13 months after the notice).
 
 ## What was done
 

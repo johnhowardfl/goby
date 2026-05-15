@@ -4,7 +4,8 @@ Recurring infra cadence. SSL certs across the LeadSpeed-adjacent properties expi
 
 | Property | Current cert vendor | Notes |
 |---|---|---|
-| `*.bearair.me` | SSLs.com PositiveSSL Wildcard | Renewed 2026-04-16, then again issued 2026-05-11 after a CNAME validation delay |
+| `*.leadspeed.me` | **Sectigo EssentialSSL Wildcard** | Renewed 2025-07-08 via Sectigo (Order `#2484906675`), expires periodically. Covers `leadspeed.me/login`, `api.leadspeed.me/`, `phoenix.leadspeed.me`, `v2.leadspeed.me`, etc. |
+| `*.bearair.me` | SSLs.com PositiveSSL Wildcard | Recurring annual renewal cycle. Recent: 2025-05 (Jennifer Jolivet at V3 Aviation flagged the 15-day pause warning), 2026-04-16, 2026-05-11 (CNAME validation delay) |
 | V3 Aviation (Stage + Prod) | (unspecified) | 3-year cert expired April 2026; renewed by John, applied by Teja 2026-03-24 |
 | FMS | (unspecified) | Renewal cycle prompted by John 2026-03-15 |
 
@@ -36,3 +37,6 @@ If this recurs: open a support ticket at SSLs.com immediately after CNAME valida
 - "SSL Certificate Not Generated After CNAME Validation – PositiveSSL Wildcard (*.bearair.me)" — 2026-05-08 to 2026-05-11
 - "Action Required: Renewal of V3 Aviation SSL Certificate" — 2026-03-18 to 2026-03-24
 - "SSL renewal time" — 2026-03-15 (FMS)
+- "Certificate renew for Domain name: *.leadspeed.me" — 2025-07-08 to 2025-07-10
+- "ORDER #2484906675 - Your EssentialSSL Wildcard Certificate for *.leadspeed.me" — 2025-07-08 (Sectigo)
+- "Fwd: 15 days until your SSL pauses" (bearair) — 2025-05-02 to 2025-05-06 (Jennifer Jolivet at V3 Aviation)

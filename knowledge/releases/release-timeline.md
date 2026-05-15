@@ -41,6 +41,20 @@ Chronological list of LeadSpeed v3 production releases that appeared in email, l
 - Sent by Varun Dabir
 - Attached release notes file (not detailed in body)
 
+## 2025-04-07 — Release Notes 4/7/2025
+
+- Subject: "Release notes 4/7/2025"
+- Sent by Varun Dabir (still on `@dreamorbit.com` at this point)
+- Tickets released to Production
+- Attached release notes file
+
+## 2025-03-12 — Code Optimization release
+
+- Subject: "Softwerks_Leadspeed_Release_Notes_12_03_2025"
+- Sent by Varun Dabir
+- Focus: **Code Optimization** tickets (rather than feature work)
+- Attached release notes file
+
 ## Bundled hotfixes (not formal releases)
 
 | Date (UTC) | What |
