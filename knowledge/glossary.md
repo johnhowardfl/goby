@@ -100,6 +100,18 @@ This means John reviews things twice: when they hit Stage, and again as Release 
 
 The Production application VM for LeadSpeed v2 (since superseded). Originally **Standard DS2 v2** (2 vCPU, 7 GB RAM, ~$106.58/mo). Sized up in February 2023 due to high CPU/memory utilization — see [bugs/leadspeed-v2-high-cpu-2023-02](bugs/leadspeed-v2-high-cpu-2023-02.md). Later subjected to IP migration in September 2025 (see [infra/azure-public-ip-upgrades](infra/azure-public-ip-upgrades.md)).
 
+## Revamp
+
+DreamOrbit's internal codename for the V3 build effort, used in 2022 weekly status reports (e.g., *"Performing regression testing on stage is On hold until Revamp is completed"*). If you see "Revamp" in older emails, it means V3 development. See [architecture/m1-decommissioning-and-revamp](architecture/m1-decommissioning-and-revamp.md).
+
+## "entered by" vs "lead owner"
+
+V2/M1 had an "entered by" field showing the M1 user who originally created the lead. V3 **removed "entered by"** and replaced it with **"lead owner"** sourced from the HubSpot deal owner. If a user asks "who entered this lead?" — the V3 answer is the HubSpot deal owner. Decided 2022-12-30.
+
+## hydrodyne.screenconnect.com
+
+The web entry point for accessing the legacy M1 application's Windows machine. Credentials `softwerks@hydro-dyne.com` were used by Saksoft for V2→V3 migration work. With M1 decommissioned, this access path should no longer be needed for normal operations — only for historical data archaeology.
+
 ## Telerik Kendo UI license
 
 LeadSpeed v3's frontend uses **Kendo UI** (Telerik). The license is annual; John holds the subscription and shares the license key with Saksoft for QA/Stage/Prod environments. Subscription product: *"Kendo UI + ASP.NET (MVC & Core), PHP, JSP - Priority Support"*. Originally renewed 2023-02-07. License expired in 2025-05 (see "Angular Kendo UI License" thread, 2025-05-15).
