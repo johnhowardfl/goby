@@ -3,6 +3,7 @@ import cookieParser from "cookie-parser";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { config } from "./config.js";
+import { globalLimiter } from "./middleware/rateLimit.js";
 import { authRouter } from "./routes/auth.js";
 import { chatRouter } from "./routes/chat.js";
 import { adminRouter } from "./routes/admin.js";
@@ -14,6 +15,10 @@ const app = express();
 
 // Behind Apache/nginx reverse proxy on Pluto.
 app.set("trust proxy", 1);
+
+// Coarse per-IP flood protection ahead of body parsing so abusive volume is
+// shed as cheaply as possible.
+app.use(globalLimiter);
 
 app.use(express.json({ limit: "2mb" }));
 app.use(cookieParser(config.sessionSecret));

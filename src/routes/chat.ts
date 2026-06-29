@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { requireAuth, type AuthedRequest } from "../auth.js";
+import { chatMessageLimiter } from "../middleware/rateLimit.js";
 import {
   createConversation,
   listConversations,
@@ -48,7 +49,7 @@ chatRouter.delete("/conversations/:id", (req: AuthedRequest, res) => {
 });
 
 // Server-Sent Events for streaming responses.
-chatRouter.post("/conversations/:id/message", async (req: AuthedRequest, res) => {
+chatRouter.post("/conversations/:id/message", chatMessageLimiter, async (req: AuthedRequest, res) => {
   const id = Number(req.params.id);
   const conv = getConversation(req.user!.id, id);
   if (!conv) {
