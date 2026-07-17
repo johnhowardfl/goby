@@ -84,7 +84,7 @@ jobs:
           fi
 
           echo "== Checking for available updates =="
-          dnf -q check-update > /tmp/updates.txt 2>/dev/null
+          $SUDO dnf -q check-update > /tmp/updates.txt 2> /tmp/dnf-err.txt
           RC=$?
           if [ "$RC" = "0" ]; then
             echo "System is fully up to date. No pending updates."
@@ -95,6 +95,8 @@ jobs:
             cat /tmp/updates.txt
           else
             echo "::error::dnf check-update failed with exit code $RC"
+            echo "-- dnf stderr:"
+            cat /tmp/dnf-err.txt
             exit 20
           fi
           echo
@@ -140,7 +142,10 @@ jobs:
           systemctl is-active goby || true
           echo "===== Done ====="
           SCRIPT
-          ssh -i ~/.ssh/id_deploy "$REMOTE_HOST" "bash -s -- $MODE" < /tmp/patch-pluto.sh
+          # Copy the script over and run it as a file: feeding it via stdin lets
+          # dnf swallow the remainder of the script mid-run.
+          scp -i ~/.ssh/id_deploy /tmp/patch-pluto.sh "$REMOTE_HOST:/tmp/patch-pluto.sh"
+          ssh -i ~/.ssh/id_deploy "$REMOTE_HOST" "bash /tmp/patch-pluto.sh $MODE"
 
       - name: Health check goby after patching
         if: ${{ (inputs.mode || env.MODE_DEFAULT) != 'check' }}
