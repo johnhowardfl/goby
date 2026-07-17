@@ -82,6 +82,10 @@ jobs:
             SUDO=""
             HAVE_ROOT=0
           fi
+          echo "-- Passwordless sudo for dnf: $([ "$HAVE_ROOT" = "1" ] && echo yes || echo NO)"
+          echo "-- sudo rules for $(whoami):"
+          sudo -n -l 2>&1 | head -n 15 || true
+          echo
 
           echo "== Checking for available updates =="
           DISABLE=""
@@ -90,7 +94,7 @@ jobs:
           }
           try_check
           RC=$?
-          if [ "$RC" != "0" ] && [ "$RC" != "100" ] && [ "$HAVE_ROOT" = "1" ]; then
+          if [ "$RC" != "0" ] && [ "$RC" != "100" ]; then
             # A single broken third-party repo (e.g. bad GPG signature) shouldn't
             # block OS patching: clean its metadata and retry, then skip it.
             BADREPO=$(grep -oP "repo '\K[^']+" /tmp/dnf-err.txt | head -n1)
