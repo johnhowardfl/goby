@@ -1,0 +1,150 @@
+name: Patch Pluto
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "check = report available updates; update = apply all updates; security = security updates only"
+        type: choice
+        options:
+          - check
+          - update
+          - security
+        default: check
+
+concurrency:
+  group: patch-pluto
+  cancel-in-progress: false
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Set up SSH
+        env:
+          SSH_KEY: ${{ secrets.PLUTO_SSH_KEY }}
+          PLUTO_HOST: ${{ secrets.PLUTO_HOST }}
+          PLUTO_USER: ${{ secrets.PLUTO_USER }}
+        run: |
+          set -e
+          [ -n "$PLUTO_HOST" ] || { echo "::error::PLUTO_HOST secret is empty"; exit 11; }
+          [ -n "$PLUTO_USER" ] || { echo "::error::PLUTO_USER secret is empty"; exit 12; }
+          [ -n "$SSH_KEY" ]    || { echo "::error::PLUTO_SSH_KEY secret is empty"; exit 13; }
+          mkdir -p ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+          if ! ssh-keygen -y -f ~/.ssh/id_deploy > /dev/null 2>&1; then
+            echo "::error::Private key is malformed (ssh-keygen could not parse it)"
+            exit 14
+          fi
+          if ! ssh-keyscan -H "$PLUTO_HOST" > ~/.ssh/known_hosts 2> /tmp/keyscan.err; then
+            echo "::error::ssh-keyscan failed:"
+            cat /tmp/keyscan.err
+            exit 15
+          fi
+          if [ ! -s ~/.ssh/known_hosts ]; then
+            echo "::error::known_hosts empty after keyscan — host did not respond"
+            cat /tmp/keyscan.err
+            exit 16
+          fi
+
+      - name: Run patch script on Pluto
+        env:
+          REMOTE_HOST: ${{ secrets.PLUTO_USER }}@${{ secrets.PLUTO_HOST }}
+          MODE: ${{ inputs.mode }}
+        run: |
+          cat > /tmp/patch-pluto.sh <<'SCRIPT'
+          set -u
+          MODE="$1"
+          echo "===== Pluto patch run — mode: $MODE ====="
+          echo "-- OS: $(cat /etc/almalinux-release 2>/dev/null || head -n1 /etc/os-release)"
+          echo "-- Kernel: $(uname -r)"
+          echo "-- Uptime: $(uptime -p)"
+          echo
+
+          # Probe sudo access to dnf (deploy user may only have scoped sudo)
+          if [ "$(id -u)" = "0" ]; then
+            SUDO=""
+            HAVE_ROOT=1
+          elif sudo -n dnf --version >/dev/null 2>&1; then
+            SUDO="sudo -n"
+            HAVE_ROOT=1
+          else
+            SUDO=""
+            HAVE_ROOT=0
+          fi
+
+          echo "== Checking for available updates =="
+          dnf -q check-update > /tmp/updates.txt 2>/dev/null
+          RC=$?
+          if [ "$RC" = "0" ]; then
+            echo "System is fully up to date. No pending updates."
+            UPDATES=0
+          elif [ "$RC" = "100" ]; then
+            UPDATES=$(grep -c -E '^[[:alnum:]]' /tmp/updates.txt || true)
+            echo "Pending updates ($UPDATES packages):"
+            cat /tmp/updates.txt
+          else
+            echo "::error::dnf check-update failed with exit code $RC"
+            exit 20
+          fi
+          echo
+          echo "== Security update summary =="
+          dnf -q updateinfo --summary 2>/dev/null || echo "(updateinfo not available)"
+          echo
+
+          if [ "$MODE" = "check" ]; then
+            if [ "$HAVE_ROOT" = "1" ]; then
+              echo "== Reboot needed? =="
+              $SUDO dnf needs-restarting -r && echo "No reboot required." || echo "REBOOT REQUIRED (kernel/core libs updated on a previous run)."
+            else
+              echo "NOTE: no passwordless sudo for dnf — cannot check reboot status or apply updates as this user."
+            fi
+            exit 0
+          fi
+
+          # update / security modes
+          if [ "$HAVE_ROOT" != "1" ]; then
+            echo "::error::Cannot apply updates: user $(whoami) has no passwordless sudo for dnf. Add a sudoers rule on Pluto, e.g.: $(whoami) ALL=(ALL) NOPASSWD: /usr/bin/dnf"
+            exit 21
+          fi
+          if [ "$UPDATES" = "0" ]; then
+            echo "Nothing to update."
+          else
+            echo "== Applying updates ($MODE) =="
+            if [ "$MODE" = "security" ]; then
+              $SUDO dnf -y upgrade --security
+            else
+              $SUDO dnf -y upgrade
+            fi
+            RC=$?
+            [ "$RC" = "0" ] || { echo "::error::dnf upgrade failed with exit code $RC"; exit 22; }
+            echo
+            echo "== Recent dnf history =="
+            $SUDO dnf history list 2>/dev/null | head -n 5 || true
+          fi
+          echo
+          echo "== Reboot needed? =="
+          $SUDO dnf needs-restarting -r && echo "No reboot required." || echo "REBOOT REQUIRED — not rebooting automatically. Run it manually during a maintenance window."
+          echo
+          echo "== Goby service status =="
+          systemctl is-active goby || true
+          echo "===== Done ====="
+          SCRIPT
+          ssh -i ~/.ssh/id_deploy "$REMOTE_HOST" "bash -s -- $MODE" < /tmp/patch-pluto.sh
+
+      - name: Health check goby after patching
+        if: ${{ inputs.mode != 'check' }}
+        run: |
+          for i in 1 2 3 4 5; do
+            if curl -fsS https://goby.softwerks.pro/health; then
+              echo
+              echo "Goby healthy after patching."
+              exit 0
+            fi
+            echo "Health check attempt $i failed; retrying..."
+            sleep 2
+          done
+          echo "::error::Goby health check failed after patching."
+          exit 1
