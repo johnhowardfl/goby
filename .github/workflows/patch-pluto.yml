@@ -18,7 +18,7 @@ on:
 
 env:
   # On push events there are no inputs; MODE_DEFAULT is used instead.
-  MODE_DEFAULT: check
+  MODE_DEFAULT: update
 
 concurrency:
   group: patch-pluto
@@ -84,8 +84,31 @@ jobs:
           fi
 
           echo "== Checking for available updates =="
-          $SUDO dnf -q check-update > /tmp/updates.txt 2> /tmp/dnf-err.txt
+          DISABLE=""
+          try_check() {
+            $SUDO dnf -q $DISABLE check-update > /tmp/updates.txt 2> /tmp/dnf-err.txt
+          }
+          try_check
           RC=$?
+          if [ "$RC" != "0" ] && [ "$RC" != "100" ] && [ "$HAVE_ROOT" = "1" ]; then
+            # A single broken third-party repo (e.g. bad GPG signature) shouldn't
+            # block OS patching: clean its metadata and retry, then skip it.
+            BADREPO=$(grep -oP "repo '\K[^']+" /tmp/dnf-err.txt | head -n1)
+            if [ -n "$BADREPO" ]; then
+              echo "WARNING: repo '$BADREPO' is failing:"
+              cat /tmp/dnf-err.txt
+              echo "Retrying after cleaning its metadata..."
+              $SUDO dnf -q clean metadata --disablerepo='*' --enablerepo="$BADREPO" >/dev/null 2>&1 || true
+              try_check
+              RC=$?
+              if [ "$RC" != "0" ] && [ "$RC" != "100" ]; then
+                echo "WARNING: repo '$BADREPO' still failing — skipping it for this run. Its packages will NOT be checked or updated."
+                DISABLE="--disablerepo=$BADREPO"
+                try_check
+                RC=$?
+              fi
+            fi
+          fi
           if [ "$RC" = "0" ]; then
             echo "System is fully up to date. No pending updates."
             UPDATES=0
@@ -124,9 +147,9 @@ jobs:
           else
             echo "== Applying updates ($MODE) =="
             if [ "$MODE" = "security" ]; then
-              $SUDO dnf -y upgrade --security
+              $SUDO dnf -y $DISABLE upgrade --security
             else
-              $SUDO dnf -y upgrade
+              $SUDO dnf -y $DISABLE upgrade
             fi
             RC=$?
             [ "$RC" = "0" ] || { echo "::error::dnf upgrade failed with exit code $RC"; exit 22; }
