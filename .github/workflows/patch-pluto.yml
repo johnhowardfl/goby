@@ -1,6 +1,10 @@
 name: Patch Pluto
 
 on:
+  # Temporary: run on push to the working branch, since workflow_dispatch only
+  # registers from the default branch. Remove the push trigger once merged to main.
+  push:
+    branches: [claude/pluto-patch-kq5xsz]
   workflow_dispatch:
     inputs:
       mode:
@@ -11,6 +15,10 @@ on:
           - update
           - security
         default: check
+
+env:
+  # On push events there are no inputs; MODE_DEFAULT is used instead.
+  MODE_DEFAULT: check
 
 concurrency:
   group: patch-pluto
@@ -52,7 +60,7 @@ jobs:
       - name: Run patch script on Pluto
         env:
           REMOTE_HOST: ${{ secrets.PLUTO_USER }}@${{ secrets.PLUTO_HOST }}
-          MODE: ${{ inputs.mode }}
+          MODE: ${{ inputs.mode || env.MODE_DEFAULT }}
         run: |
           cat > /tmp/patch-pluto.sh <<'SCRIPT'
           set -u
@@ -135,7 +143,7 @@ jobs:
           ssh -i ~/.ssh/id_deploy "$REMOTE_HOST" "bash -s -- $MODE" < /tmp/patch-pluto.sh
 
       - name: Health check goby after patching
-        if: ${{ inputs.mode != 'check' }}
+        if: ${{ (inputs.mode || env.MODE_DEFAULT) != 'check' }}
         run: |
           for i in 1 2 3 4 5; do
             if curl -fsS https://goby.softwerks.pro/health; then
