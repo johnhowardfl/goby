@@ -1,10 +1,6 @@
 name: Patch Pluto
 
 on:
-  # Temporary: run on push to the working branch, since workflow_dispatch only
-  # registers from the default branch. Remove the push trigger once merged to main.
-  push:
-    branches: [claude/pluto-patch-kq5xsz]
   workflow_dispatch:
     inputs:
       mode:

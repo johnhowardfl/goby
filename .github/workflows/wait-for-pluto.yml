@@ -1,0 +1,50 @@
+name: Wait for Pluto reboot
+
+on:
+  push:
+    branches: [claude/pluto-patch-kq5xsz]
+  workflow_dispatch:
+
+concurrency:
+  group: wait-for-pluto
+  cancel-in-progress: true
+
+jobs:
+  wait:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Poll goby health until Pluto is back
+        run: |
+          echo "Polling https://goby.softwerks.pro/health every 15s (up to ~20 min)..."
+          for i in $(seq 1 80); do
+            if BODY=$(curl -fsS -m 10 https://goby.softwerks.pro/health 2>/dev/null); then
+              echo "UP after ~$(( (i-1) * 15 ))s of polling. Health response: $BODY"
+              exit 0
+            fi
+            echo "attempt $i: still down"
+            sleep 15
+          done
+          echo "::error::Pluto did not come back within ~20 minutes"
+          exit 1
+
+      - name: Set up SSH
+        env:
+          SSH_KEY: ${{ secrets.PLUTO_SSH_KEY }}
+          PLUTO_HOST: ${{ secrets.PLUTO_HOST }}
+        run: |
+          set -e
+          mkdir -p ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+          ssh-keyscan -H "$PLUTO_HOST" > ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Confirm reboot took effect
+        env:
+          REMOTE_HOST: ${{ secrets.PLUTO_USER }}@${{ secrets.PLUTO_HOST }}
+        run: |
+          ssh -i ~/.ssh/id_deploy "$REMOTE_HOST" \
+            'echo "Kernel: $(uname -r)"; echo "Uptime: $(uptime -p)"; \
+             echo "Pending updates:"; dnf -q --disablerepo=tailscale-stable check-update < /dev/null > /tmp/u.txt 2>/dev/null; \
+             RC=$?; [ "$RC" = "0" ] && echo "  none — fully patched" || { [ "$RC" = "100" ] && cat /tmp/u.txt || echo "  (check failed rc=$RC)"; }; \
+             echo "Goby: $(systemctl is-active goby)"'
